@@ -8,9 +8,14 @@
 import Foundation
 
 enum ReposApi: BaseApi {
-    case repos(owner: String, repo: String)
+    case repos(name: String)
     
     var domain: String { "repos" }
-    var path: String? { nil }
     var method: HTTPMethod { .get }
+    var path: String? {
+        switch self {
+        case let .repos(repo):
+            return "\(repo)"
+        }
+    }
 }

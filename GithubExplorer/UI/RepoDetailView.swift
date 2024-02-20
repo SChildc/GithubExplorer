@@ -7,6 +7,19 @@
 
 import SwiftUI
 
+private enum Const {
+    // Content
+    static let contentHorizontalPadding: CGFloat = 16
+    
+    // Description
+    static let descriptionTextSize: CGFloat = 16
+    static let descriptionTextHeight: CGFloat = 21
+    
+    // Gaps
+    static let titleAndCountsGap: CGFloat = 4
+    static let countsGap: CGFloat = 2
+}
+
 struct RepoDetailView: View {
     let name: String
     let description: String
@@ -17,19 +30,27 @@ struct RepoDetailView: View {
     @StateObject private var repoDetail = RepoDetail()
     
     var body: some View {
-        VStack(spacing: .zero) {
-            Text(name)
-            Text("\(description) by \(owner)")
+        VStack(alignment: .leading, spacing: Const.titleAndCountsGap) {
+            Divider()
             
-            HStack {
-                Text("\(forksCount)")
-                Text("\(stargazersCount)")
-                Text("\(repoDetail.subscribersCount)")
+            Text("\(description) by \(owner)")
+                .font(fontSize: Const.descriptionTextSize, lineHeight: Const.descriptionTextHeight)
+            
+            HStack(spacing: Const.countsGap) {
+                CountInfoView(type: .forks, count: forksCount)
+                CountInfoView(type: .stargazers, count: stargazersCount)
+                if let subscribersCount = repoDetail.subscribersCount {
+                    CountInfoView(type: .subscribers, count: subscribersCount)
+                }
             }
+            
+            Spacer()
         }
+        .padding(.horizontal, Const.contentHorizontalPadding)
         .task {
             repoDetail.fetch(owner: owner, name: name)
         }
+        .navigationTitle(Text(name))
     }
 }
 

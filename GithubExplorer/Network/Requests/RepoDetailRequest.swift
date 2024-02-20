@@ -11,7 +11,7 @@ struct RepoDetailRequest: NetworkRequestable {
     let api: BaseApi
     
     init(owner: String, name: String) {
-        api = ReposApi.repos(owner: owner, repo: name)
+        api = ReposApi.repos(name: name)
     }
     
     struct Response: Decodable {

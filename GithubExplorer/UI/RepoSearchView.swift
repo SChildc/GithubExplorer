@@ -7,6 +7,16 @@
 
 import SwiftUI
 
+private enum Const {
+    static let titleTextSize: CGFloat = 17
+    static let titleTextHeight: CGFloat = 22
+    static let subtitleTextSize: CGFloat = 15
+    static let subtitleTextHeight: CGFloat = 20
+    static let subtitleTextColor = "#3C3C43"
+    static let titleAndCountsGap: CGFloat = 4
+    static let countsGap: CGFloat = 2
+}
+
 struct RepoSearchView: View {
     @StateObject private var repositories = Repositories()
     
@@ -16,8 +26,21 @@ struct RepoSearchView: View {
                 Divider()
                 
                 List {
-                    ForEach(repositories.items, content: RepositoryInfoView.init)
+                    ForEach(repositories.items) { item in
+                        NavigationLink {
+                            RepoDetailView(
+                                name: item.fullName,
+                                description: item.description ?? "",
+                                owner: item.owner,
+                                forksCount: item.forksCount ?? .zero,
+                                stargazersCount: item.stargazersCount ?? .zero)
+                        } label: {
+                            RepositoryInfoView(item: item)
+                        }
+
+                    }
                 }
+                .listStyle(.plain)
                 
                 Spacer()
             }
@@ -34,14 +57,32 @@ private extension RepoSearchView {
         let item: RepositoriesRequest.Response.Items
         
         var body: some View {
-            VStack(alignment: .leading) {
-                Text(item.fullName)
-                Text("\(item.description ?? "") by \(item.owner)")
-                HStack {
-                    Text("\(item.forksCount ?? .zero)")
-                    Text("\(item.stargazersCount ?? .zero)")
+            VStack(alignment: .leading, spacing: Const.titleAndCountsGap) {
+                VStack(alignment: .leading, spacing: .zero) {
+                    Text(item.fullName)
+                        .font(fontSize: Const.titleTextSize, lineHeight: Const.titleTextHeight)
+                    
+                    Text(formattedDescription)
+                        .foregroundColor(Color(hex: Const.subtitleTextColor))
+                        .font(fontSize: Const.subtitleTextSize, lineHeight: Const.subtitleTextHeight)
+                }
+                
+                HStack(spacing: Const.countsGap) {
+                    CountInfoView(type: .forks, count: item.forksCount ?? .zero)
+                    CountInfoView(type: .stargazers, count: item.stargazersCount ?? .zero)
                 }
             }
+        }
+        
+        var formattedDescription: String {
+            var desc = item.description ?? ""
+            
+            if desc.isEmpty == false {
+                desc += " "
+            }
+            
+            desc += "by \(item.owner)"
+            return desc
         }
     }
 }

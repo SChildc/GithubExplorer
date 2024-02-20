@@ -11,7 +11,7 @@ import OSLog
 private let logger = Logger(subsystem: "GitExplorer", category: "RepoDetail")
 
 final class RepoDetail: ObservableObject {
-    @Published var subscribersCount: Int = .zero
+    @Published var subscribersCount: Int?
     
     func fetch(owner: String, name: String) {
         Task {
