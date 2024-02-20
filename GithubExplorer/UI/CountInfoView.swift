@@ -18,17 +18,22 @@ private enum Const {
 
 struct CountInfoView: View {
     let type: CountInfoType
-    let count: Int
+    let count: Int?
     
     var body: some View {
         HStack(spacing: Const.countGap) {
             Image(type.icon)
                 .frame(width: Const.countIconSize.width, height: Const.countIconSize.height)
             
-            Text("\(count)")
-                .foregroundColor(.white)
-                .font(.system(size: Const.countTextFontSize))
-                .frame(height: Const.countTextHeight)
+            if let count {
+                Text("\(count)")
+                    .foregroundColor(.white)
+                    .font(.system(size: Const.countTextFontSize))
+                    .frame(height: Const.countTextHeight)
+            } else {
+                ProgressView()
+                    .frame(width: Const.countTextHeight, height: Const.countTextHeight)
+            }
         }
         .padding(Const.countPadding)
         .background(

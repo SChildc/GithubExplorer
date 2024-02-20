@@ -15,7 +15,7 @@ struct GithubExplorerApp: App {
         WindowGroup {
 //            ContentView()
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-            RepoSearchView()
+            RepoMainView()
         }
     }
 }

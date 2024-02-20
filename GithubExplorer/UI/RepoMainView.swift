@@ -17,7 +17,7 @@ private enum Const {
     static let countsGap: CGFloat = 2
 }
 
-struct RepoSearchView: View {
+struct RepoMainView: View {
     @StateObject private var repositories = Repositories()
     
     var body: some View {
@@ -52,7 +52,7 @@ struct RepoSearchView: View {
 
 // MARK: - Internal Views
 
-private extension RepoSearchView {
+private extension RepoMainView {
     struct RepositoryInfoView: View {
         let item: RepositoriesRequest.Response.Items
         
@@ -92,5 +92,5 @@ private extension RepoSearchView {
 extension RepositoriesRequest.Response.Items: Identifiable {}
 
 #Preview {
-    RepoSearchView()
+    RepoMainView()
 }
